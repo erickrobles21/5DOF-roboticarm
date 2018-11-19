@@ -1,0 +1,118 @@
+#include  <VarSpeedServo.h> 
+VarSpeedServo Base;
+VarSpeedServo Brazo1_1;
+VarSpeedServo Brazo1_2;
+VarSpeedServo Codo;
+VarSpeedServo Muneca;
+VarSpeedServo Giro;
+VarSpeedServo Pinza;
+
+char comando;
+int posicion;
+int posicion2;
+int X;
+int vBase;
+int vBrazo;
+int vCodo;
+int vMuneca;
+int vGiro;
+int vPinza;
+
+void setup(){
+  Base.attach(13);
+  Brazo1_1.attach(12);
+  Brazo1_2.attach(11);
+  Codo.attach(10);
+  Muneca.attach(9);
+  Giro.attach(8);
+  Pinza.attach(7);
+
+  vBase =20;
+vBrazo =20;
+vCodo=20;
+vMuneca=20;
+vGiro=255;
+ vPinza=255;
+
+  Base.write(90,10);
+  Brazo1_1.write(90,10);
+  Brazo1_2.write(90,10);
+  Codo.write(90,1);
+  Muneca.write(90,10);
+  Giro.write(90,255);
+  Pinza.write(90,255);
+  Serial.begin(9600);
+}
+ void loop(){
+  leer_Dato();
+  switch(comando){
+    case 'a':
+    Base.write(posicion,vBase,false);
+    comando = ' ';
+    break;
+    
+    case 'b':
+      if(posicion==90){      //invertir direccion de un motor
+      posicion2=posición; }
+     else if (posicion>90){
+       X = posicion -90 ;
+       posicion2 = 90- X;   }
+     else if (posicion<90){ 
+      X = 90 - posicion;
+      posicion2 = 90 + X;}
+    Serial.println(posicion);
+    Brazo1_1.write(posicion,vBrazo,false);
+    Brazo1_2.write(posicion2,vBrazo,false);
+    comando = ' ';
+    break;
+
+    case 'c':
+    Codo.write(posicion,vCodo,false);
+    comando = ' ';
+    break;
+    
+    case 'd':
+    Muneca.write(posicion,vMuneca,false);
+    comando = ' ';
+    break;
+
+    case 'e':
+   
+    Giro.write(posicion,vGiro,false);
+    comando = ' ';
+    break;
+
+   case 'f':
+    Pinza.write(posicion,vPinza,false);
+    comando = ' ';
+    break; 
+
+   case 'g':
+    vBase = posicion;
+    break;
+
+    case 'h':
+    vBrazo = posicion;
+    break;
+
+    case 'i':
+    vCodo = posicion;
+    break;
+
+    case 'j':
+    vMuneca = posicion;
+    break;
+    
+    case 'k':
+    vGiro = posicion;
+    break;
+    case 'm':
+    vPinza = posicion;
+    break;
+  } }
+void leer_Dato(){
+  if (Serial.available()>0){
+  comando = Serial.read();
+  posicion = Serial.parseInt();
+  delay(10);  }}
+
